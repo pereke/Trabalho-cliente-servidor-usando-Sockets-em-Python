@@ -13,7 +13,7 @@ conn, addr = s.accept()
 
 while True:
 	data = conn.recv(1024) #Tamanho do buffer.
-	print "Mensagem Recebida:", data
+	print ("Mensagem Recebida:", data)
 	message = data.upper()
 	conn.send(message)  # echo
 
