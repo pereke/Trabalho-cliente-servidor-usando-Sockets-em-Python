@@ -10,10 +10,13 @@ s.listen(1)
  
 conn, addr = s.accept()
 #print 'Endereco de conexao: ', addr
-
-while True:
+data = conn.recv(1024) #Tamanho do buffer.
+print ("Mensagem Recebida:", data.decode())
+message = data.upper()
+conn.send(message)
+while data != "exit":
 	data = conn.recv(1024) #Tamanho do buffer.
-	print ("Mensagem Recebida:", data)
+	print ("Mensagem Recebida:", data.decode())
 	message = data.upper()
 	conn.send(message)  # echo
 
