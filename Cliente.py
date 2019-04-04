@@ -60,7 +60,7 @@ if(pacotesEnviar > 1):
 print("\nTestando o Download: ")
 url = "https://www.amd.com/system/files/TechDocs/24593.pdf"
 tempo = time.time()
-f = urllib.request.urlopen(url2)
+f = urllib.request.urlopen(url)
 data = f.read()
 print(len(data))
 print((len(data) / (1024*1024 / 8)) / (time.time() - tempo), "Mbps")
