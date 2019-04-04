@@ -1,16 +1,16 @@
 import socket, time, sys, urllib.request, urllib.parse, urllib.error
 
 ## ip servidor
-IP = "127.0.0.1"
+IP = "18.204.102.146"
 ## porta
-PORTA = 5002
+PORTA = 7100
 ## mensagem a ser enviada
 MENSAGEM = "Ping!" 
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-sock.settimeout(0.250)
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.settimeout(2)
 
-pacotesEnviar = 0
+pacotesEnviar = 10
 rttSoma = 0
 pacotesEnviados = 0
 pacotesRecebidos = 0
@@ -19,13 +19,13 @@ pacotesPerdidos = 0
 primeiroPacoteRecebido = False
 ultimoRtt = 0
 somaJitter = 0
-
+sock.connect((IP, PORTA))
 print("Estatísticas para {0}:".format(IP))
 for i in range(pacotesEnviar):
     time.sleep(1)
     pacotesEnviados += 1
     tempoEnvio = time.time()
-    sock.sendto(bytes(MENSAGEM, "utf-8"), (IP, PORTA))
+    sock.send(MENSAGEM.encode())
     try:
         resposta, server = sock.recvfrom(1024)
         tempoChegada = time.time()
@@ -58,7 +58,7 @@ if(pacotesEnviar > 1):
 
 
 print("\nTestando o Download: ")
-url = "https://www.amd.com/system/files/TechDocs/24593.pdf"
+url = ""
 tempo = time.time()
 f = urllib.request.urlopen(url)
 data = f.read()
