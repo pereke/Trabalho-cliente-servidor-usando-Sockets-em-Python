@@ -10,7 +10,6 @@ tcp.listen(1)
 
 udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 udp.bind((IP, PORTA_UDP))
-udp.listen(1)
 
 conn, addr = tcp.accept()
 while True:
