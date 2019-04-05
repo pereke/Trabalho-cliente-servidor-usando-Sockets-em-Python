@@ -1,8 +1,9 @@
-import socket
+import socket, threading, signal, time
 
 IP = ''
 PORTA_UDP = 7100
 PORTA_TCP = 7200
+
 
 tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 tcp.bind((IP, PORTA_TCP))
@@ -10,47 +11,57 @@ tcp.listen(1)
 
 udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 udp.bind((IP, PORTA_UDP))
+udp.settimeout(3)
+
+class Rtt(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.shutdown_flag = threading.Event()
+
+    def run(self):
+        while not self.shutdown_flag.is_set():
+            try:
+                data, addr = udp.recvfrom(1024)
+                udp.sendto(data, addr)
+            except socket.timeout:
+                continue
+
+
+def upload_cliente():
+    f = open('recebido.bin','wb')
+    parte = conn.recv(1024)
+    while (parte):
+        f.write(parte)
+        parte = conn.recv(1024)
+        if(parte.decode() == "acabou-acabou-acabou-acabou-acabou-acabou-acabou-acabou-acabou-acabou"):
+            conn.send("ACK".encode())
+            break
+
+    f.close()
+
 
 conn, addr = tcp.accept()
+print("Conectado: ", addr)
 while True:
         data = conn.recv(1024)
-        if(data.decode() == 'fazer ping'):
-                while True:
-                        data, addr = udp.recvfrom(1024)
-                        if(data.decode() == 'fim ping'):
-                                break
-                        else:
-                                udp.sendto(data, addr)  # echo
+        if(data.decode() == 'fazer rtt'):
+            print("fazer rtt")
+            t = Rtt()
+            t.start()
+            data = conn.recv(1024)
+            print(data.decode())
+            t.shutdown_flag.set()
+            time.sleep(3)
 
-        '''
-        if(data.decode() == 'fazer download'):
-                #vai usar a mesma conexao tcp
-                while True:
-                        ##enviar arquivo
+        elif(data.decode() == 'fazer download'):
+            print('fazer down')
 
-        if(data.decode() == 'fazer upload'):
-                #vai usar a mesma conexao tcp
-                while True:
-                        ##receber arquivo
-        '''
+        elif(data.decode() == 'fazer upload'):
+            print('fazer up')
+            upload_cliente()
+            print('fim up')
 
-        if(data.decode() == 'fim'):
-                print("chegou no fim")
-                conn.close()
-                break
-
-
-'''
-conn, addr = s.accept()
-print 'Endereco de conexao: ', addr
-data = conn.recv(1024) #Tamanho do buffer.
-print ("Mensagem Recebida:", data.decode())
-message = data.upper()
-conn.send(message)
-while data != "exit":
-        data = conn.recv(1024) #Tamanho do buffer.
-        print ("Mensagem Recebida:", data.decode())
-        message = data.upper()
-        conn.send(message)  # echo
-conn.close()
-'''
+        elif(data.decode() == 'fim'):
+            print("chegou no fim")
+            conn.close()
+            break
