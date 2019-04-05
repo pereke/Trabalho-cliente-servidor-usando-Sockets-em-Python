@@ -20,8 +20,8 @@ while True:
 		while True:
 			data = conn_udp.recv(1024)
 			if(data.decode() == 'fim ping'):
-				conn_udp.close();
-				break;
+				conn_udp.close()
+				break
 			else:
 				conn_udp.send(message)  # echo
 		
@@ -36,8 +36,8 @@ while True:
 			##receber arquivo
 			
 	if(data.decode() == 'fim'):
-		conn.close();
-		break;
+		conn.close()
+		break
 
 
 '''		
