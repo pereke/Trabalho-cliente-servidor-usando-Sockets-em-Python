@@ -33,35 +33,33 @@ def upload_cliente():
     while (parte):
         f.write(parte)
         parte = conn.recv(1024)
-        if(parte.decode() == "acabou-acabou-acabou-acabou-acabou-acabou-acabou-acabou-acabou-acabou"):
-            conn.send("ACK".encode())
-            break
 
     f.close()
 
-
-conn, addr = tcp.accept()
-print("Conectado: ", addr)
 while True:
-        data = conn.recv(1024)
-        if(data.decode() == 'fazer rtt'):
-            print("fazer rtt")
-            t = Rtt()
-            t.start()
+    conn, addr = tcp.accept()
+    print("Conectado: ", addr)
+    while True:
             data = conn.recv(1024)
-            print(data.decode())
-            t.shutdown_flag.set()
-            time.sleep(3)
+            if(data.decode() == 'fazer rtt'):
+                print("fazer rtt")
+                t = Rtt()
+                t.start()
+                data = conn.recv(1024)
+                print(data.decode())
+                t.shutdown_flag.set()
+                time.sleep(3)
 
-        elif(data.decode() == 'fazer download'):
-            print('fazer down')
+            elif(data.decode() == 'fazer download'):
+                print('fazer down')
 
-        elif(data.decode() == 'fazer upload'):
-            print('fazer up')
-            upload_cliente()
-            print('fim up')
+            elif(data.decode() == 'fazer upload'):
+                print('fazer up')
+                upload_cliente()
+                conn, addr = tcp.accept()
+                print('fim up')
 
-        elif(data.decode() == 'fim'):
-            print("chegou no fim")
-            conn.close()
-            break
+            elif(data.decode() == 'fim'):
+                print("Desconectado: ", addr)
+                conn.close()
+                break
