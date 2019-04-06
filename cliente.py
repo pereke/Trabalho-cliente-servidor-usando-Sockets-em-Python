@@ -83,7 +83,8 @@ def download():
     print("fazer")
 
 def upload():
-    f = open('100mb.bin','rb')
+    global sock_tcp
+    f = open('30mb.bin','rb')
     inicio = time.time()
     l = f.read(1024)
     while (l):
@@ -91,12 +92,15 @@ def upload():
         l = f.read(1024)
 
     f.close()
-    sock_tcp.send("acabou-acabou-acabou-acabou-acabou-acabou-acabou-acabou-acabou-acabou".encode())
-    sock_tcp.recv(1024)
+    sock_tcp.shutdown(socket.SHUT_WR) # forma de avisar que a transferencia terminou
     fim = time.time()
-    ##sock_tcp.shutdown(socket.SHUT_WR) # tem q ver se vai continuar funcionado dps dessa linha!
-    ##sock_tcp.close()
-    print(( (os.stat('100mb.bin').st_size) / (1024*1024 / 8)) / (fim - inicio), "Mbps")
+    sock_tcp.close()
+
+    sock_tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock_tcp.settimeout(5)
+    sock_tcp.connect(destino_tcp)
+
+    print(( (os.stat('30mb.bin').st_size) / (1024*1024 / 8)) / (fim - inicio), "Mbps")
 
 
 sock_tcp.connect(destino_tcp)
@@ -115,6 +119,7 @@ while True:
         sock_tcp.send('fazer rtt'.encode())
         rtt()
         sock_tcp.send('fim rtt'.encode())
+        time.sleep(3)
 
     elif (op == '2'):
         sock_tcp.send('fazer download'.encode())
@@ -130,16 +135,3 @@ while True:
     else:
         sock_tcp.send('fim'.encode())
         break
-
-
-
-
-# print("\nTestando o Download: ")
-# url = ""
-# tempo = time.time()
-# f = urllib.request.urlopen(url)
-# data = f.read()
-# print(len(data))
-# print((len(data) / (1024*1024 / 8)) / (time.time() - tempo), "Mbps")
-# with open("arq.pdf", "wb") as code:
-#    code.write(data)
