@@ -29,7 +29,7 @@ class Rtt(threading.Thread):
 
 
 def upload_cliente():
-    f = open('30mb.bin','wb')
+    f = open('recebido.bin','wb')
     parte = conn.recv(1024)
     while (parte):
         f.write(parte)
@@ -42,7 +42,7 @@ def download_servidor():
 	f = open('30mb.bin','rb')
 	inicio = time.time()
 	l = f.read(1024)
-	while (l):
+	for i in range(1, 30721):
 		conn.send(l)
 		l = f.read(1024)
 	f.close()
@@ -80,4 +80,3 @@ while True:
                 print("Desconectado: ", addr)
                 conn.close()
                 break
-
