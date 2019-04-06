@@ -8,7 +8,7 @@ import os
 
 # ip servidor
 IP = "18.204.102.146"
-#IP = "localhost"
+IP = "localhost"
 # portas
 PORTA_UDP = 7100
 PORTA_TCP = 7200
@@ -80,7 +80,18 @@ def rtt():
 
 
 def download():
-    print("fazer")
+	global sock_tcp
+	f = open('recebidoD.bin','wb')
+	parte = sock_tcp.recv(1024)
+	i = 1
+	#while(parte):
+	for i in range(1, 30720):
+		i = i + 1
+		f.write(parte)
+		parte = sock_tcp.recv(1024)
+	f.write(parte)
+	f.close()
+    
 
 def upload():
     global sock_tcp
@@ -130,7 +141,15 @@ while True:
         upload()
 
     elif (op == '4'):
-        print("fazer todos")
+        sock_tcp.send('fazer rtt'.encode())
+        rtt()
+        sock_tcp.send('fim rtt'.encode())
+        time.sleep(3)
+        sock_tcp.send('fazer download'.encode())
+        download()
+        time.sleep(3)
+        sock_tcp.send('fazer upload'.encode())
+        upload()
 
     else:
         sock_tcp.send('fim'.encode())
