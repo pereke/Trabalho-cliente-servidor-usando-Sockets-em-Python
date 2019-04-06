@@ -8,7 +8,7 @@ import os
 
 # ip servidor
 IP = "18.204.102.146"
-IP = "localhost"
+#IP = "localhost"
 # portas
 PORTA_UDP = 7100
 PORTA_TCP = 7200
