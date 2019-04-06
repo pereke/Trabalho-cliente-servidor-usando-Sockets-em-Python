@@ -29,7 +29,7 @@ class Rtt(threading.Thread):
 
 
 def upload_cliente():
-    f = open('recebido.bin','wb')
+    f = open('30mb.bin','wb')
     parte = conn.recv(1024)
     while (parte):
         f.write(parte)
