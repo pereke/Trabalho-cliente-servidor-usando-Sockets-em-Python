@@ -47,7 +47,7 @@ def download_servidor():
 		l = f.read(1024)
 	f.close()
 	fim = time.time()
-	print(((os.stat('recebido.bin').st_size) / (1024*1024 / 8)) / (fim - inicio + 1), "Mbps")
+	print(((os.stat('30mb.bin').st_size) / (1024*1024 / 8)) / (fim - inicio + 1), "Mbps")
 
 conn = ""
 addr = ""
