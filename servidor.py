@@ -1,4 +1,4 @@
-import socket, threading, signal, time
+import os, socket, threading, signal, time
 
 IP = ''
 PORTA_UDP = 7100
@@ -6,6 +6,7 @@ PORTA_TCP = 7200
 
 
 tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+tcp.settimeout(5)
 tcp.bind((IP, PORTA_TCP))
 tcp.listen(1)
 
@@ -33,9 +34,23 @@ def upload_cliente():
     while (parte):
         f.write(parte)
         parte = conn.recv(1024)
-
     f.close()
+    
+    
+def download_servidor():
+	global conn, addr, tcp
+	f = open('30mb.bin','rb')
+	inicio = time.time()
+	l = f.read(1024)
+	while (l):
+		conn.send(l)
+		l = f.read(1024)
+	f.close()
+	fim = time.time()
+	print(((os.stat('recebido.bin').st_size) / (1024*1024 / 8)) / (fim - inicio + 1), "Mbps")
 
+conn = ""
+addr = ""
 while True:
     conn, addr = tcp.accept()
     print("Conectado: ", addr)
@@ -52,6 +67,8 @@ while True:
 
             elif(data.decode() == 'fazer download'):
                 print('fazer down')
+                download_servidor()
+                print('fim down')
 
             elif(data.decode() == 'fazer upload'):
                 print('fazer up')
@@ -63,3 +80,4 @@ while True:
                 print("Desconectado: ", addr)
                 conn.close()
                 break
+
