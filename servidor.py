@@ -40,10 +40,13 @@ def upload_cliente():
 def download_servidor():
     f = open('30mb.bin','rb')
     l = f.read(1024)
-    for i in range(1, 30721):
+    while(l):
         conn.send(l)
         l = f.read(1024)
     f.close()
+    
+    conn.close()
+    conn, addr = tcp.accept()
     
 
 conn = ""
