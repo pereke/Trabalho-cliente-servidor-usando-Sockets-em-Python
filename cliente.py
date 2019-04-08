@@ -97,8 +97,8 @@ def download():
     sock_tcp.settimeout(5)
     sock_tcp.connect(destino_tcp)
     
-    print( ( ((os.stat('recebidoD.bin').st_size) * 8) / (1024*1024) ) / (fim - inicio), "Mbps")
-    
+    print( "{0:.2f} Mbps".format( (((os.stat('recebidoD.bin').st_size) * 8) / (1024*1024) ) / (fim - inicio) ) )
+
 
 def upload():
     global sock_tcp
@@ -118,7 +118,7 @@ def upload():
     sock_tcp.settimeout(5)
     sock_tcp.connect(destino_tcp)
 
-    print( ( ((os.stat('30mb.bin').st_size) * 8) / (1024*1024) ) / (fim - inicio), "Mbps")
+    print( "{0:.2f} Mbps".format( (((os.stat('30mb.bin').st_size) * 8) / (1024*1024) ) / (fim - inicio) ) )
 
 
 sock_tcp.connect(destino_tcp)
