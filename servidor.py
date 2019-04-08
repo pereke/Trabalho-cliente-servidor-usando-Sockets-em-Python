@@ -6,7 +6,7 @@ PORTA_TCP = 7200
 
 
 tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-tcp.settimeout(5)
+#tcp.settimeout(5)
 tcp.bind((IP, PORTA_TCP))
 tcp.listen(1)
 
@@ -38,16 +38,13 @@ def upload_cliente():
     
     
 def download_servidor():
-	global conn, addr, tcp
-	f = open('30mb.bin','rb')
-	inicio = time.time()
-	l = f.read(1024)
-	for i in range(1, 30721):
-		conn.send(l)
-		l = f.read(1024)
-	f.close()
-	fim = time.time()
-	print(((os.stat('30mb.bin').st_size) / (1024*1024 / 8)) / (fim - inicio + 1), "Mbps")
+    f = open('30mb.bin','rb')
+    l = f.read(1024)
+    for i in range(1, 30721):
+        conn.send(l)
+        l = f.read(1024)
+    f.close()
+    
 
 conn = ""
 addr = ""
