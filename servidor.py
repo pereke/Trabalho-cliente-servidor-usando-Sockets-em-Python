@@ -38,6 +38,7 @@ def upload_cliente():
     
     
 def download_servidor():
+    global conn, addr
     f = open('30mb.bin','rb')
     l = f.read(1024)
     while(l):
