@@ -82,17 +82,21 @@ def rtt():
 def download():
     global sock_tcp
     f = open('recebidoD.bin','wb')
+    i = 1
     inicio = time.time()
     parte = sock_tcp.recv(1024)
-    i = 1
-    for i in range(1, 30720):
+    while(parte):
         i = i + 1
         f.write(parte)
         parte = sock_tcp.recv(1024)
-    f.write(parte)
-    f.close()
-
+        
     fim = time.time()
+    f.close()
+    
+    sock_tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock_tcp.settimeout(5)
+    sock_tcp.connect(destino_tcp)
+    
     print( ( ((os.stat('recebidoD.bin').st_size) * 8) / (1024*1024) ) / (fim - inicio), "Mbps")
     
 
@@ -104,10 +108,10 @@ def upload():
     while (l):
         sock_tcp.send(l)
         l = f.read(1024)
-
+        
+    fim = time.time()
     f.close()
     sock_tcp.shutdown(socket.SHUT_WR) # forma de avisar que a transferencia terminou
-    fim = time.time()
     sock_tcp.close()
 
     sock_tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -126,8 +130,6 @@ while True:
     print("| 4 - Todas            |")
     print("| Outros - Sair        |")
     print("+----------------------+\n")
-
-    print(os.stat('30mb.bin').st_size)
 
     op = input("Escolha uma opcao: ")
 
