@@ -93,7 +93,7 @@ def download():
     f.close()
 
     fim = time.time()
-    print(((os.stat('recebidoD.bin').st_size) / (1024*1024 / 8)) / (fim - inicio), "Mbps")
+    print( ( ((os.stat('recebidoD.bin').st_size) * 8) / (1024*1024) ) / (fim - inicio), "Mbps")
     
 
 def upload():
@@ -114,7 +114,7 @@ def upload():
     sock_tcp.settimeout(5)
     sock_tcp.connect(destino_tcp)
 
-    print(( (os.stat('30mb.bin').st_size) / (1024*1024 / 8)) / (fim - inicio), "Mbps")
+    print( ( ((os.stat('30mb.bin').st_size) * 8) / (1024*1024) ) / (fim - inicio), "Mbps")
 
 
 sock_tcp.connect(destino_tcp)
@@ -126,6 +126,8 @@ while True:
     print("| 4 - Todas            |")
     print("| Outros - Sair        |")
     print("+----------------------+\n")
+
+    print(os.stat('30mb.bin').st_size)
 
     op = input("Escolha uma opcao: ")
 
