@@ -1,10 +1,4 @@
-import socket
-import time
-import sys
-import urllib.request
-import urllib.parse
-import urllib.error
-import os
+import socket, time, sys, os
 
 # ip servidor
 IP = "ibiza.dcc.ufla.br"
